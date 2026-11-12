@@ -1,0 +1,6 @@
+package com.ledgerline.service;
+import com.ledgerline.dto.*;import com.ledgerline.entity.*;import com.ledgerline.repository.*;import java.util.*;import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
+@Service public class AccountService {private final AccountRepository accounts;private final UserRepository users;public AccountService(AccountRepository a,UserRepository u){accounts=a;users=u;}
+ @Transactional public Views.AccountView create(String email,Requests.CreateAccount r){AppUser owner=users.findByEmail(email).orElseThrow(()->new NoSuchElementException("User not found"));return Views.AccountView.of(accounts.save(new Account(owner,r.name().trim(),r.currency())));}
+ @Transactional(readOnly=true) public List<Views.AccountView> list(String email){AppUser u=users.findByEmail(email).orElseThrow(()->new NoSuchElementException("User not found"));return accounts.findByOwnerIdOrderByIdAsc(u.getId()).stream().map(Views.AccountView::of).toList();}
+ public Account ownedAccount(Long id,String email){AppUser u=users.findByEmail(email).orElseThrow(()->new NoSuchElementException("User not found"));return accounts.findByIdAndOwnerId(id,u.getId()).orElseThrow(()->new NoSuchElementException("Account not found"));}}

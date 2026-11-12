@@ -1,0 +1,4 @@
+package com.ledgerline.service;
+import com.ledgerline.dto.*; import com.ledgerline.entity.AppUser; import com.ledgerline.repository.UserRepository; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional;
+@Service public class AuthService {private final UserRepository users;private final PasswordEncoder encoder;public AuthService(UserRepository u,PasswordEncoder e){users=u;encoder=e;}
+ @Transactional public Views.UserView register(Requests.Register r){String email=r.email().trim().toLowerCase();if(users.existsByEmail(email))throw new IllegalArgumentException("An account with this email already exists");return Views.UserView.of(users.save(new AppUser(r.fullName().trim(),email,encoder.encode(r.password()))));}}

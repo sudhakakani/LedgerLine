@@ -1,0 +1,3 @@
+package com.ledgerline.controller;
+import com.ledgerline.dto.*;import com.ledgerline.service.AccountService;import jakarta.validation.Valid;import java.security.Principal;import java.util.List;import org.springframework.http.*;import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/api/accounts") public class AccountController {private final AccountService service;public AccountController(AccountService s){service=s;}@PostMapping public ResponseEntity<Views.AccountView> create(@Valid @RequestBody Requests.CreateAccount r,Principal p){return ResponseEntity.status(HttpStatus.CREATED).body(service.create(p.getName(),r));}@GetMapping public List<Views.AccountView> list(Principal p){return service.list(p.getName());}}

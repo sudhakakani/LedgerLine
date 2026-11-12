@@ -1,0 +1,209 @@
+{
+  "info": {
+    "name": "LedgerLine API",
+    "description": "Local Postman collection for the LedgerLine Spring Boot API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{email}}",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "{{password}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "email",
+      "value": "kakanisudha@example.com"
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "accountId",
+      "value": "1"
+    },
+    {
+      "key": "toAccountId",
+      "value": "2"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/health",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "Register Kakanisudha Lakshmi",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Kakanisudha Lakshmi\",\n  \"email\": \"kakanisudha@example.com\",\n  \"password\": \"Choose-A-New-Password-123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/auth/register",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "My profile",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me"
+      }
+    },
+    {
+      "name": "Create account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Everyday account\",\n  \"currency\": \"INR\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/accounts"
+      }
+    },
+    {
+      "name": "List my accounts",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/accounts"
+      }
+    },
+    {
+      "name": "Deposit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 500.00,\n  \"description\": \"Opening deposit\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/accounts/{{accountId}}/deposit"
+      }
+    },
+    {
+      "name": "Withdraw",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 100.00,\n  \"description\": \"Cash withdrawal\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/accounts/{{accountId}}/withdraw"
+      }
+    },
+    {
+      "name": "Transfer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{$guid}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromAccountId\": {{accountId}},\n  \"toAccountId\": {{toAccountId}},\n  \"amount\": 50.00,\n  \"description\": \"Transfer between my accounts\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/transfers"
+      }
+    },
+    {
+      "name": "Account ledger entries",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/accounts/{{accountId}}/entries"
+      }
+    },
+    {
+      "name": "Admin audit feed",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/admin/audit"
+      }
+    }
+  ]
+}
