@@ -160,6 +160,6 @@ public class LedgerService {
     public List<Views.EntryView> history(String email, Long id) {
         Account account = accounts.findById(id).orElseThrow(() -> new NoSuchElementException("Account not found"));
         own(account, email);
-        return entries.findTop100ByAccountIdOrderByCreatedAtDesc(id).stream().map(Views.EntryView::of).toList();
+        return entries.findTop100ByAccount_IdOrderByCreatedAtDesc(id).stream().map(Views.EntryView::of).toList();
     }
 }
